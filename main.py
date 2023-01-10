@@ -15,7 +15,7 @@ app.secret_key = "T0to_na_p4s_d0rm1"
 
 @app.route("/", methods = ['GET'])
 def home():
-	return render_template('home.html')
+    return render_template('home.html')
 
 @app.route("/application_web", methods=["GET"])
 def application():
