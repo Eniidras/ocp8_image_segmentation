@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Exemples d'images</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
+  </head>
+  <body>
+    <img id="picture" src="data:image/jpeg;base64,{{ img_data }}">
+    <p><a href="/application_web">Retour aux images</a></p>
+  </body>
+</html>

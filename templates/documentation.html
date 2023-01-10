@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Documentation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
+  </head>
+
+  <body>
+  	<h1>Documentation API</h1>
+  	<p class ="intro">Documentation pour l'API d'analyse de sentiment d'un tweet.</p>
+  	<p>Pour analyser le sentiment d'un texte, vous devez l'envoyer dans le paramètre <code>'text'</code> d'un fichier json.</p>
+
+  	<h3>Exemple</h3>
+  	<pre><code>
+# A curl example
+curl -X POST https://tweet-sentiment-api-ociap7.herokuapp.com/api/sentiment_detection/ \
+	-H 'Content-type: application/json' \
+	-d '{"text" : "This example is awesome !"}'
+  	</code></pre>
+
+  	<h3>Résultat</h3>
+  	<pre><code>
+{
+	result: "positive"
+}
+  	</code></pre>
+
+  	<h3>Erreurs</h3>
+  	<p>Vous pouvez obtenir une erreur 400 en cas de mauvaise requête :</p>
+  	<pre><code>
+{
+	message: "Pas de document json dans le corps de la requête."
+	documentation: "https://tweet-sentiment-api-ociap7.herokuapp.com/documentation"
+}
+  	</code></pre>
+  	<p>Ce message indique que l'api n'a pas detecté de fichier json dans le corps de la requête. Plus d'informations ici : <a href="https://reqbin.com/req/c-dwjszac0/curl-post-json-example">https://reqbin.com/req/c-dwjszac0/curl-post-json-example</a>.</p>
+
+  	<pre><code>
+{
+	message: "Le corps de la requête n'a pas de champs 'text'."
+	documentation: "https://tweet-sentiment-api-ociap7.herokuapp.com/documentation"
+}
+  	</code></pre>
+  	<p>Dans ce cas là, le fichier envoyé a été mal saisi, veillez faire attention à bien saisir la clé <code>'text'</code>.</p>
+
+  </body>
+</html>

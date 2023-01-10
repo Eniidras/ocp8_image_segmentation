@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Exemples d'images</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css') }}">
+  </head>
+
+  <body>
+  	<h3>Choisissez une image à segmenter</h3>
+    {% with imgs = get_flashed_messages(category_filter=["img"]) %}
+      {% if imgs %}
+        {% for img in imgs %}
+          <figure>
+            <input type="image" src="static/images/{{img}}" border="0" alt="submit" />
+            <figcaption><a href="/application_web/rendu?img_name={{img}}">Sélectionner</a></figcaption>
+          </figure>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+  </body>
+</html>
