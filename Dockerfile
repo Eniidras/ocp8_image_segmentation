@@ -16,6 +16,6 @@ RUN apt install ffmpeg libsm6 libxext6  -y
 
 COPY . .
 
-CMD ["python3", "main.py", "host", "0.0.0.0", "--port", "5000"]
+CMD ["python3", "main.py", "--host", "0.0.0.0", "--port", "5000"]
 
 EXPOSE 5000
