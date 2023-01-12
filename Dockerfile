@@ -1,5 +1,5 @@
 # Base image
-FROM python:3.10
+FROM python:3.6
 
 # Set the working directory
 WORKDIR /web-app
@@ -16,6 +16,6 @@ RUN apt install ffmpeg libsm6 libxext6  -y
 
 COPY . .
 
-CMD ["python", "main.py", "host", "0.0.0.0", "--port", "5000"]
+CMD ["python3", "main.py", "host", "0.0.0.0", "--port", "5000"]
 
 EXPOSE 5000
