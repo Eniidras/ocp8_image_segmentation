@@ -24,16 +24,64 @@ def application():
         flash(img, "img")
     return render_template('application_web.html')
 
+@app.route("/api", methods=["POST"])
+def api():
+    # change that : img_name = request.args.get("img_name")
+    img_name = None
+    pmask = modele.treat_image(img_name)
+    res = Image.fromarray(pmask.astype(np.uint8))
+
+    data = io.BytesIO()
+    res.save(data, "PNG")
+    encoded_res_data = base64.b64encode(data.getvalue())
+    return # autre chose render_template("rendu.html", img_data=encoded_img_data.decode('utf-8'))
+
 @app.route("/application_web/rendu", methods=["GET"])
 def render():
     img_name = request.args.get("img_name")
-    mask = modele.treat_image(img_name)
-    mask = modele.merge(mask, img_name)
+    tmask = modele.return_mask(img_name)
+    pmask = modele.treat_image(img_name)    
 
-    data = io.BytesIO()
-    mask.save(data, "PNG")
-    encoded_img_data = base64.b64encode(data.getvalue())
-    return render_template("rendu.html", img_data=encoded_img_data.decode('utf-8'))
+    # get the image
+    img = modele.return_img(img_name)
+
+    img_data = io.BytesIO()
+    img.save(img_data, "PNG")
+    encoded_img_data = base64.b64encode(img_data.getvalue())
+
+    # get the true mask
+    colored_tmask = modele.color_mask(tmask)
+
+    tmask_data = io.BytesIO()
+    colored_tmask.save(tmask_data, "PNG")
+    encoded_tmask_data = base64.b64encode(tmask_data.getvalue())
+
+    # get the predicted mask
+    colored_pmask = modele.color_mask(pmask)
+
+    pmask_data = io.BytesIO()
+    colored_pmask.save(pmask_data, "PNG")
+    encoded_pmask_data = base64.b64encode(pmask_data.getvalue())
+
+    # get the superposition of the masks and the image
+    img_with_tmask = modele.merge(tmask, img_name)
+
+    img_with_tmask_data = io.BytesIO()
+    img_with_tmask.save(img_with_tmask_data, "PNG")
+    encoded_img_with_tmask_data = base64.b64encode(img_with_tmask_data.getvalue())
+
+    img_with_pmask = modele.merge(pmask, img_name)
+
+    img_with_pmask_data = io.BytesIO()
+    img_with_pmask.save(img_with_pmask_data, "PNG")
+    encoded_img_with_pmask_data = base64.b64encode(img_with_pmask_data.getvalue())
+
+    return render_template("rendu.html",
+        img_data=encoded_img_data.decode('utf-8'),
+        tmask_data=encoded_tmask_data.decode('utf-8'),
+        pmask_data=encoded_pmask_data.decode('utf-8'),
+        img_with_tmask_data=encoded_img_with_tmask_data.decode('utf-8'),
+        img_with_pmask_data=encoded_img_with_pmask_data.decode('utf-8'))
 
 @app.route("/application_web/rendu_brut", methods=["GET"])
 def render_raw():

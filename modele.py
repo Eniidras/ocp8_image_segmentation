@@ -11,11 +11,50 @@ from PIL import Image
 model_unet = keras.models.load_model("static/model/checkpoint_mini_unet.h5")
 
 dir_path = "static/images/"
+mask_path = "static/masks/"
 
 def return_img(img_name):
     img = cv2.imread(dir_path+img_name)
-
+    img = Image.fromarray(img.astype(np.uint8))
     return img
+
+def cat(i):
+    # void
+    if i in {0, 1, 2, 3, 4, 5, 6}:
+        return 0
+    # flat
+    elif i in {7, 8, 9, 10}:
+        return 1
+    # construction
+    elif i in {11, 12, 13, 14, 15, 16}:
+        return 2
+    # object
+    elif i in {17, 18, 19, 20}:
+        return 3
+    # nature
+    elif i in {21, 22}:
+        return 4
+    # sky
+    elif i in {23}:
+        return 5
+    # human
+    elif i in {24, 25}:
+        return 6
+    # vehicle
+    elif i in {26, 27, 28, 29, 30, 31, 32, 33, -1}:
+        return 7
+
+def return_mask(img_name):
+    mask = cv2.imread(mask_path+img_name)
+    res = np.asarray(np.empty((256,256,3)))
+
+    for i in range(256):
+        for j in range(256):
+            pix = mask[i][j][0]
+            for k in range(3):
+                res[i][j][k] = cat(pix)
+    
+    return res
 
 def treat_image(img_name):
     # Return ndarray of the mask
@@ -62,4 +101,15 @@ def merge(mask, img_name):
     res = cv2.addWeighted(img.astype(np.uint8), .7, new_mask.astype(np.uint8), .4, 0.0)
 
     res = Image.fromarray(res.astype(np.uint8))
+    return res
+
+def color_mask(mask):
+    new_mask = np.asarray(np.empty((256,256,3)))
+
+    for i in range(256):
+        for j in range(256):
+            for k in range(3):
+                new_mask[i,j,k] = palette[mask[i,j,0]][k]
+
+    res = Image.fromarray(new_mask.astype(np.uint8))
     return res

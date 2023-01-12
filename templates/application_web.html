@@ -12,7 +12,7 @@
       {% if imgs %}
         {% for img in imgs %}
           <figure>
-            <input type="image" src="static/images/{{img}}" border="0" alt="submit" />
+            <img id="picture" src="static/images/{{img}}">
             <figcaption><a href="/application_web/rendu?img_name={{img}}">Sélectionner</a></figcaption>
           </figure>
         {% endfor %}
