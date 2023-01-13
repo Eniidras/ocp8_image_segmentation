@@ -9,5 +9,22 @@
   <body>
   	<h1>Bienvenue</h1>
     <p>Test du modèle sur des images : <a href="/application_web">application web</a>.</p>
+    <p>Possibilité de récupérer les masques via l'api en suivant les requêtes de la forme suivante :</p>
+        <pre><code>
+# A curl example
+curl -X POST http://IP_ADDRESS/api \
+    -H 'Content-type: application/json' \
+    -d '{"img_name" : "Nom_de_l_image.png"}'
+        </code></pre>
+    <p>Les images disponibles sont les suivantes :</p>
+        <ul>
+            {% with imgs = get_flashed_messages(category_filter=["img"]) %}
+                {% if imgs %}
+                    {% for img in imgs %}
+                        <li>{{img}}</li>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </ul>
   </body>
 </html>
